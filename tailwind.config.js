@@ -6,7 +6,8 @@ export default {
       colors: {
         backgroundColor: "#020817",
         btnColor: "#F8FAFC",
-        primary:"#93A2B7"
+        primary:"#93A2B7",
+        secondary: "#1E293B"
       },
     },
   },

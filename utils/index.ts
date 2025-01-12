@@ -21,5 +21,4 @@ export function handleError(error: AxiosError) {
     } else {
         toast.error("Ocorreu um erro inesperado.");
     }
-    console.error("Erro detalhado:", error);
 }
