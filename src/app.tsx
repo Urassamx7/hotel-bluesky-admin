@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { userSchema, userType } from "../types/index";
+import { toast, ToastContainer } from "react-toastify";
 export function App() {
   const {
     formState: { errors },
@@ -16,6 +17,7 @@ export function App() {
 
   const onSubmit = (data: userType) => {
     console.log(data);
+    toast.success("Login efetuado com sucesso!");
   };
 
   return (
@@ -99,6 +101,7 @@ export function App() {
           </p>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 }
