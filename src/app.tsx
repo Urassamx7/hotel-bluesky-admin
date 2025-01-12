@@ -1,4 +1,23 @@
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { userSchema, userType } from "../types/index";
 export function App() {
+  const {
+    formState: { errors },
+    handleSubmit,
+    register,
+  } = useForm<userType>({
+    resolver: zodResolver(userSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  const onSubmit = (data: userType) => {
+    console.log(data);
+  };
+
   return (
     <div className="relative h-screen flex-col items-center justify-center md:grid lg:max-w-none  lg:px-0 bg-backgroundColor">
       <div className="flex h-full items-center p-4 lg:p-8">
@@ -11,8 +30,12 @@ export function App() {
               Insira seu e-mail e senha para aceder a página do administrador.
             </p>
           </div>
-          <form className="w-full space-y-2">
+          <form
+            className="w-full space-y-2"
+            onSubmit={handleSubmit((data) => onSubmit(data))}
+          >
             <div className="space-y-2">
+              {/* biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
               <label className="text-zinc-100 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                 Email
               </label>
@@ -21,9 +44,16 @@ export function App() {
                 type="email"
                 className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-zinc-100 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                 placeholder="Enter your email..."
+                {...register("email")}
               />
+              {errors.email && (
+                <p className="text-sm text-red-500 text-pretty">
+                  {errors.email.message}
+                </p>
+              )}
             </div>
             <div className="space-y-2">
+              {/* biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
               <label className="text-zinc-100 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                 Senha
               </label>
@@ -32,18 +62,22 @@ export function App() {
                 type="password"
                 className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-zinc-100 focus-visible:outline-none focus-visible:ring-1 disabled:cursor-not-allowed disabled:opacity-50"
                 placeholder="Insira a senha..."
+                {...register("password")}
               />
+              {errors.password && (
+                <p className="text-sm text-red-500 text-pretty">
+                  {errors.password.message}
+                </p>
+              )}
             </div>
-            <button
-              className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 disabled:pointer-events-none disabled:opacity-50 shadow h-9 px-4 py-2 ml-auto w-full bg-btnColor hover:bg-btnColor/70"
-              type="submit"
-            >
+            {/* biome-ignore lint/a11y/useButtonType: <explanation> */}
+            <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 disabled:pointer-events-none disabled:opacity-50 shadow h-9 px-4 py-2 ml-auto w-full bg-btnColor hover:bg-btnColor/70">
               Continuar
             </button>
           </form>
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t"></span>
+              <span className="w-full border-t" />
             </div>
           </div>
           <p className="px-8 text-center text-sm  text-primary">
