@@ -3,6 +3,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { userSchema, type userType } from "../types/index";
 import { toast, ToastContainer } from "react-toastify";
 import { api } from "../services/index";
+import { handleError } from "../utils/index";
+import { AxiosError } from "axios";
 
 const LoginPage = () => {
   const {
@@ -18,15 +20,15 @@ const LoginPage = () => {
   });
 
   const onSubmit = async (data: userType) => {
-    const response = await api.post("/auth/login", data);
-
-    if (!response) {
-      toast.error("Falha no login");
+    try {
+      const response = await api.post("/auth/login", data);
+      console.log(response.data);
+      toast.success("Login efetuado com sucesso!");
+    } catch (error) {
+      console.log(error);
+      if (error instanceof AxiosError) handleError(error);
     }
-    console.log(response.data);
-    toast.success("Login efetuado com sucesso!");
   };
-
   return (
     <div className="relative h-screen flex-col items-center justify-center md:grid lg:max-w-none  lg:px-0 bg-backgroundColor">
       <div className="flex h-full items-center p-4 lg:p-8">
