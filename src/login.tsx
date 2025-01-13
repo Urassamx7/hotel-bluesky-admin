@@ -2,11 +2,13 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { userSchema, type userType } from "../types/index";
 import { toast, ToastContainer } from "react-toastify";
-import { api } from "../services/index";
 import { handleError } from "../utils/index";
 import { AxiosError } from "axios";
+import { useAuth } from "./context/auth";
 
 const LoginPage = () => {
+  const { loginUser } = useAuth();
+
   const {
     formState: { errors },
     handleSubmit,
@@ -21,9 +23,11 @@ const LoginPage = () => {
 
   const onSubmit = async (data: userType) => {
     try {
-      const response = await api.post("/auth/login", data);
-      console.log(response.data);
-      toast.success("Login efetuado com sucesso!");
+      const response = loginUser(data.email, data.password);
+      if (response) {
+        console.log(response);
+        toast.success("Login efetuado com sucesso!");
+      }
     } catch (error) {
       console.log(error);
       if (error instanceof AxiosError) handleError(error);
