@@ -1,13 +1,21 @@
 import {
   Table,
+  Text,
   Badge,
   AlertDialog,
   Button,
   Flex,
   DropdownMenu,
+  Dialog,
+  TextField,
 } from "@radix-ui/themes";
 import { FecthuserType } from "../../types";
 import { Ellipsis } from "lucide-react";
+import { useState } from "react";
+import { Delete } from "../../services";
+import { toast } from "react-toastify";
+import delay from "delay";
+import { ToastContainer } from "react-toastify";
 interface Props {
   users: FecthuserType[];
 }
@@ -18,54 +26,63 @@ export const TableForm = ({ users }: Props) => {
     { title: "Telefone", accessor: "phone" },
     { title: "Estado", accessor: "status" },
   ];
-  const actions = [
-    { title: "Editar", accessor: "Update" },
-    { title: "Deletar", accessor: "Delete" },
-  ];
   return (
-    <Table.Root size="1">
-      <Table.Header>
-        <Table.Row>
-          {columns.map((column) => (
-            <Table.ColumnHeaderCell key={column.accessor}>
-              {column.title}
-            </Table.ColumnHeaderCell>
-          ))}
-        </Table.Row>
-      </Table.Header>
-      <Table.Body>
-        {users &&
-          users.map((user) => (
-            <Table.Row key={user.user_id}>
-              <Table.RowHeaderCell>{user.full_name}</Table.RowHeaderCell>
-              <Table.Cell>{user.email}</Table.Cell>
-              <Table.Cell>{user.phone}</Table.Cell>
-              <Table.Cell>
-                {user.status === "Active" ? (
-                  <Badge color="green"> {user.status}</Badge>
-                ) : (
-                  <Badge color="red"> {user.status}</Badge>
-                )}
-              </Table.Cell>
-              <Table.Cell>
-                <button className="hover:bg-white/10 ease-in-out rounded-md">
-                  {ActionDropdown(user.full_name, user.user_id)}
-                </button>
-              </Table.Cell>
-            </Table.Row>
-          ))}
-      </Table.Body>
-    </Table.Root>
+    <>
+      <Table.Root size="1">
+        <Table.Header>
+          <Table.Row>
+            {columns.map((column) => (
+              <Table.ColumnHeaderCell key={column.accessor}>
+                {column.title}
+              </Table.ColumnHeaderCell>
+            ))}
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
+          {users &&
+            users.map((user) => (
+              <Table.Row key={user.user_id}>
+                <Table.RowHeaderCell>{user.full_name}</Table.RowHeaderCell>
+                <Table.Cell>{user.email}</Table.Cell>
+                <Table.Cell>{user.phone}</Table.Cell>
+                <Table.Cell>
+                  {user.status === "Active" ? (
+                    <Badge color="green"> {user.status}</Badge>
+                  ) : (
+                    <Badge color="red"> {user.status}</Badge>
+                  )}
+                </Table.Cell>
+                <Table.Cell>
+                  <button className="hover:bg-white/10 ease-in-out rounded-md">
+                    {ActionDropdown(user.full_name, user.user_id)}
+                  </button>
+                </Table.Cell>
+              </Table.Row>
+            ))}
+        </Table.Body>
+      </Table.Root>
+      <ToastContainer />
+    </>
   );
 };
 
 const AlertDelete = (name: string, id: string) => {
+  async function DeleteUser(id: string) {
+    delay(2000);
+    await Delete(id)
+  }
+
   return (
     <AlertDialog.Root>
-      <AlertDialog.Trigger>
+      <AlertDialog.Trigger style={{ cursor: "pointer" }}>
         <Button color="red">Deletar</Button>
       </AlertDialog.Trigger>
-      <AlertDialog.Content maxWidth="450px">
+      <AlertDialog.Content
+        maxWidth="450px"
+        style={{
+          backgroundColor: "#020817",
+        }}
+      >
         <AlertDialog.Title>Deletar Cliente</AlertDialog.Title>
         <AlertDialog.Description size="2">
           {`Você tem certeza que vai eliminar o cliente ${name}? Esta ação não pode ser revertida.`}
@@ -73,12 +90,12 @@ const AlertDelete = (name: string, id: string) => {
 
         <Flex gap="3" mt="4" justify="end">
           <AlertDialog.Cancel>
-            <Button variant="soft" color="gray">
+            <Button variant="surface" color="gray">
               Cancelar
             </Button>
           </AlertDialog.Cancel>
-          <AlertDialog.Action onClick={() => Delete(name, id)}>
-            <Button variant="solid" color="red">
+          <AlertDialog.Action>
+            <Button variant="solid" color="red" onClick={() => DeleteUser(id)}>
               Deletar Cliente
             </Button>
           </AlertDialog.Action>
@@ -86,10 +103,6 @@ const AlertDelete = (name: string, id: string) => {
       </AlertDialog.Content>
     </AlertDialog.Root>
   );
-};
-
-const Delete = (name: string, id: string) => {
-  console.log(`Name: ${name} \n id: ${id}`);
 };
 
 const ActionDropdown = (name: string, id: string) => {
@@ -110,14 +123,64 @@ const ActionDropdown = (name: string, id: string) => {
         style={{
           backgroundColor: "#020817",
           width: "100px",
-          cursor: "pointer"
+          cursor: "pointer",
         }}
       >
-        <DropdownMenu.Item>Editar</DropdownMenu.Item>
-        <DropdownMenu.Item asChild >
-          {AlertDelete(name, id)}
+        <DropdownMenu.Item asChild>
+          <FormDialog />
         </DropdownMenu.Item>
+        <DropdownMenu.Separator />
+        <DropdownMenu.Item asChild>{AlertDelete(name, id)}</DropdownMenu.Item>
       </DropdownMenu.Content>
     </DropdownMenu.Root>
+  );
+};
+
+const FormDialog = () => {
+  return (
+    <Dialog.Root>
+      <Dialog.Trigger style={{ cursor: "pointer" }}>
+        <Button>Editar</Button>
+      </Dialog.Trigger>
+
+      <Dialog.Content maxWidth="450px">
+        <Dialog.Title>Edit profile</Dialog.Title>
+        <Dialog.Description size="2" mb="4">
+          Make changes to your profile.
+        </Dialog.Description>
+
+        <Flex direction="column" gap="3">
+          <label>
+            <Text as="div" size="2" mb="1" weight="bold">
+              Name
+            </Text>
+            <TextField.Root
+              defaultValue="Freja Johnsen"
+              placeholder="Enter your full name"
+            />
+          </label>
+          <label>
+            <Text as="div" size="2" mb="1" weight="bold">
+              Email
+            </Text>
+            <TextField.Root
+              defaultValue="freja@example.com"
+              placeholder="Enter your email"
+            />
+          </label>
+        </Flex>
+
+        <Flex gap="3" mt="4" justify="end">
+          <Dialog.Close>
+            <Button variant="soft" color="gray">
+              Cancel
+            </Button>
+          </Dialog.Close>
+          <Dialog.Close>
+            <Button>Save</Button>
+          </Dialog.Close>
+        </Flex>
+      </Dialog.Content>
+    </Dialog.Root>
   );
 };
