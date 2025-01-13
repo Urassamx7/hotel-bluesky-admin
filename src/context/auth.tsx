@@ -5,7 +5,7 @@ import type { AdminLoginProps, UserProfile } from "../../types/schema";
 import axios from "axios";
 // biome-ignore lint/style/useImportType: <explanation>
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { toast } from "react-toastify";
+
 
 type AuthContextType = {
   admin: UserProfile | null;
@@ -31,14 +31,13 @@ export const AuthProvider = ({ children }: Props) => {
   ): Promise<AdminLoginProps> {
     const response = await LoginFunc(email, password);
     if (response) {
-      api.defaults.headers.Authorization = `Bearer ${response.token}`;
+      api.defaults.headers["Authorization"] = `Bearer ${response.token}`;
       localStorage.setItem("@hotelbluesky:token", response.token);
       localStorage.setItem(
         "@hotelbluesky:admin",
         JSON.stringify(response.admin)
       );
       setAdmin(response.admin);
-      toast.success('Login efectuado com sucesso.')
       navigate("/");
       return response;
     }
@@ -55,7 +54,6 @@ export const AuthProvider = ({ children }: Props) => {
         axios.defaults.headers.common.Authorization = `Bearer ${token}`;
       } catch (error) {
         console.error("Error parsing admin data:", error);
-        // Optionally, you might want to clear the invalid data from localStorage
         localStorage.removeItem("@hotelbluesky:admin");
         localStorage.removeItem("@hotelbluesky:token");
       }
