@@ -8,6 +8,7 @@ export default {
         btnColor: "#F8FAFC",
         primary: "#93A2B7",
         secondary: "#1E293B",
+        dialog: "#020817",
       },
     },
   },

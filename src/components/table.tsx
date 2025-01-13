@@ -8,7 +8,6 @@ import {
 } from "@radix-ui/themes";
 import { FecthuserType } from "../../types";
 import { Ellipsis } from "lucide-react";
-import { useState } from "react";
 interface Props {
   users: FecthuserType[];
 }
@@ -49,7 +48,9 @@ export const TableForm = ({ users }: Props) => {
                 )}
               </Table.Cell>
               <Table.Cell>
-                <button className="hover:bg-white/10 ease-in-out rounded-md">{ActionDropdown(user.full_name, user.user_id)}</button>
+                <button className="hover:bg-white/10 ease-in-out rounded-md">
+                  {ActionDropdown(user.full_name, user.user_id)}
+                </button>
               </Table.Cell>
             </Table.Row>
           ))}
@@ -92,13 +93,11 @@ const Delete = (name: string, id: string) => {
 };
 
 const ActionDropdown = (name: string, id: string) => {
-  const [hover, setHover] = useState(false);
-
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger
         style={{
-          backgroundColor: hover ? "black" : "transparent",
+          backgroundColor: "transparent",
           cursor: "pointer",
           transition: "color 0.3s ease",
         }}
@@ -107,9 +106,17 @@ const ActionDropdown = (name: string, id: string) => {
           <Ellipsis />
         </Button>
       </DropdownMenu.Trigger>
-      <DropdownMenu.Content>
+      <DropdownMenu.Content
+        style={{
+          backgroundColor: "#020817",
+          width: "100px",
+          cursor: "pointer"
+        }}
+      >
         <DropdownMenu.Item>Editar</DropdownMenu.Item>
-        <DropdownMenu.Item asChild>{AlertDelete(name, id)}</DropdownMenu.Item>
+        <DropdownMenu.Item asChild >
+          {AlertDelete(name, id)}
+        </DropdownMenu.Item>
       </DropdownMenu.Content>
     </DropdownMenu.Root>
   );
