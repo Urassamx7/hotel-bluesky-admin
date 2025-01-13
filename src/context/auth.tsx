@@ -71,7 +71,7 @@ export const AuthProvider = ({ children }: Props) => {
     localStorage.removeItem("@hotelbluesky:token");
     setAdmin(null);
     setToken(null);
-    navigate("/login");
+    navigate("/auth/login");
   };
 
   return (
