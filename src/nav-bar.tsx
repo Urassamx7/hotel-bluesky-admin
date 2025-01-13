@@ -1,10 +1,11 @@
-import { NavLink, useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const Navbar = () => {
   const location = useLocation();
   const currentPath = location.pathname;
   console.log(currentPath);
-  const setIsActive = `flex items-center gap-2 overflow-hidden rounded-md py-2 text-sm font-medium hover:text-muted-foreground transparent bg-white text-black`;
+  const setIsActive =
+    "flex items-center gap-2 overflow-hidden rounded-md py-2 text-sm font-medium hover:text-secondary  transparent bg-white";
 
   return (
     <div className="flex h-screen overflow-hidden bg-secondary">
@@ -17,7 +18,7 @@ const Navbar = () => {
           <div className="px-2 py-2">
             <div className="mt-3 space-y-1">
               <nav className="grid items-start gap-2">
-                <NavLink
+                <Link
                   className={
                     currentPath === "/"
                       ? setIsActive
@@ -25,9 +26,17 @@ const Navbar = () => {
                   }
                   to="/"
                 >
-                  <span className="mr-2 truncate">Dashboard</span>
-                </NavLink>
-                <NavLink
+                  <span
+                    className={
+                      currentPath === "/"
+                        ? "mr-2 truncate text-black"
+                        : "mr-2 truncate"
+                    }
+                  >
+                    Dashboard
+                  </span>
+                </Link>
+                <Link
                   className={
                     currentPath === "/student"
                       ? setIsActive
@@ -35,18 +44,34 @@ const Navbar = () => {
                   }
                   to="/student"
                 >
-                  <span className="mr-2 truncate">Students</span>
-                </NavLink>
-                <NavLink
+                  <span
+                    className={
+                      currentPath === "/student"
+                        ? "mr-2 truncate text-black"
+                        : "mr-2 truncate"
+                    }
+                  >
+                    Students
+                  </span>
+                </Link>
+                <Link
                   className={
                     currentPath === "/logout"
-                     ? setIsActive
+                      ? setIsActive
                       : "flex items-center gap-2 overflow-hidden rounded-md py-2 text-sm font-medium hover:text-muted-foreground transparent"
                   }
-                  to="/logout"
+                  to="/auth/logout"
                 >
-                  <span className="mr-2 truncate">Logout</span>
-                </NavLink>
+                  <span
+                    className={
+                      currentPath === "/logout"
+                        ? "mr-2 truncate text-black"
+                        : "mr-2 truncate"
+                    }
+                  >
+                    Logout
+                  </span>
+                </Link>
               </nav>
             </div>
           </div>
