@@ -8,6 +8,7 @@ import {
 } from "@radix-ui/themes";
 import { FecthuserType } from "../../types";
 import { Ellipsis } from "lucide-react";
+import { useState } from "react";
 interface Props {
   users: FecthuserType[];
 }
@@ -48,7 +49,7 @@ export const TableForm = ({ users }: Props) => {
                 )}
               </Table.Cell>
               <Table.Cell>
-                {ActionDropdown(user.full_name, user.user_id)}
+                <button className="hover:bg-white/10 ease-in-out rounded-md">{ActionDropdown(user.full_name, user.user_id)}</button>
               </Table.Cell>
             </Table.Row>
           ))}
@@ -90,13 +91,18 @@ const Delete = (name: string, id: string) => {
   console.log(`Name: ${name} \n id: ${id}`);
 };
 
-
-
-
 const ActionDropdown = (name: string, id: string) => {
+  const [hover, setHover] = useState(false);
+
   return (
     <DropdownMenu.Root>
-      <DropdownMenu.Trigger>
+      <DropdownMenu.Trigger
+        style={{
+          backgroundColor: hover ? "black" : "transparent",
+          cursor: "pointer",
+          transition: "color 0.3s ease",
+        }}
+      >
         <Button variant="soft">
           <Ellipsis />
         </Button>
