@@ -11,9 +11,7 @@ import {
 } from "@radix-ui/themes";
 import { FecthuserType } from "../../types";
 import { Ellipsis } from "lucide-react";
-import { useState } from "react";
 import { Delete } from "../../services";
-import { toast } from "react-toastify";
 import delay from "delay";
 import { ToastContainer } from "react-toastify";
 interface Props {
@@ -69,7 +67,7 @@ export const TableForm = ({ users }: Props) => {
 const AlertDelete = (name: string, id: string) => {
   async function DeleteUser(id: string) {
     delay(2000);
-    await Delete(id)
+    await Delete(id);
   }
 
   return (

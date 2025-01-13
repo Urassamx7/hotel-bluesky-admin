@@ -2,12 +2,12 @@ import { AxiosError } from "axios";
 import { toast } from "react-toastify";
 
 export function handleError(error: AxiosError) {
-    if (error instanceof AxiosError && error.status === 401) {
+    if (error instanceof AxiosError) {
         if (error.response) {
             if (error.response.status === 401) {
                 toast.error("E-mail ou senha incorretos.");
-            } else if (error.response.data?.message) {
-                toast.error(error.response.data.message);
+            } else if (error.response.data && typeof error.response.data === "object" && "message" in error.response.data) {
+                toast.error(error.response.data.message as string);
             } else {
                 toast.error(`Erro do servidor: ${error.response.status}`);
             }
