@@ -1,11 +1,9 @@
 import { api, LoginFunc } from "../../services/index";
-// biome-ignore lint/style/useImportType: <explanation>
 import { useNavigate } from "react-router-dom";
 import type { AdminLoginProps, UserProfile } from "../../types/schema";
 import axios from "axios";
 // biome-ignore lint/style/useImportType: <explanation>
 import React, { createContext, useContext, useEffect, useState } from "react";
-
 
 type AuthContextType = {
   admin: UserProfile | null;
@@ -31,7 +29,7 @@ export const AuthProvider = ({ children }: Props) => {
   ): Promise<AdminLoginProps> {
     const response = await LoginFunc(email, password);
     if (response) {
-      api.defaults.headers["Authorization"] = `Bearer ${response.token}`;
+      api.defaults.headers.common.Authorization = `Bearer ${response.token}`;
       localStorage.setItem("@hotelbluesky:token", response.token);
       localStorage.setItem(
         "@hotelbluesky:admin",
