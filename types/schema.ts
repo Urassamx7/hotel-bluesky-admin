@@ -1,5 +1,5 @@
 export interface AdminLoginProps {
-    admin: UserProfile
+    user: UserProfile
     token: string
 }
 export type UserProfile = {

@@ -2,8 +2,8 @@ import { api, LoginFunc } from "../../services/index";
 import { useNavigate } from "react-router-dom";
 import type { AdminLoginProps, UserProfile } from "../../types/schema";
 import axios from "axios";
-// biome-ignore lint/style/useImportType: <explanation>
-import React, { createContext, useContext, useEffect, useState } from "react";
+import type React from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 type AuthContextType = {
   admin: UserProfile | null;
@@ -21,33 +21,14 @@ export const AuthProvider = ({ children }: Props) => {
   const navigate = useNavigate();
   const [token, setToken] = useState<string | null>(null);
   const [admin, setAdmin] = useState<UserProfile | null>(null);
-  const [isReady, setIsReady] = useState<boolean>(false);
+  const [isReady, setIsReady] = useState(false);
 
-  async function loginUser(
-    email: string,
-    password: string
-  ): Promise<AdminLoginProps> {
-    const response = await LoginFunc(email, password);
-    if (response) {
-      api.defaults.headers.common.Authorization = `Bearer ${response.token}`;
-      localStorage.setItem("@hotelbluesky:token", response.token);
-      localStorage.setItem(
-        "@hotelbluesky:admin",
-        JSON.stringify(response.admin)
-      );
-      setAdmin(response.admin);
-      navigate("/");
-      return response;
-    }
-    throw new Error("Login failed");
-  }
   useEffect(() => {
     const admin = localStorage.getItem("@hotelbluesky:admin");
     const token = localStorage.getItem("@hotelbluesky:token");
     if (admin && token) {
       try {
-        const parsedAdmin = JSON.parse(admin);
-        setAdmin(parsedAdmin);
+        setAdmin(JSON.parse(admin));
         setToken(token);
         axios.defaults.headers.common.Authorization = `Bearer ${token}`;
       } catch (error) {
@@ -58,6 +39,24 @@ export const AuthProvider = ({ children }: Props) => {
     }
     setIsReady(true);
   }, []);
+  async function loginUser(
+    email: string,
+    password: string
+  ): Promise<AdminLoginProps> {
+    const response = await LoginFunc(email, password);
+    if (response) {
+      api.defaults.headers.common.Authorization = `Bearer ${response.token}`;
+      localStorage.setItem("@hotelbluesky:token", response.token);
+      localStorage.setItem(
+        "@hotelbluesky:admin",
+        JSON.stringify(response.user)
+      );
+      setAdmin(response.user);
+      navigate("/");
+      return response;
+    }
+    throw new Error("Login failed");
+  }
 
   const isLoggedIn = () => {
     return !!admin;
