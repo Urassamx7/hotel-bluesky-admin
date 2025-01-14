@@ -14,5 +14,13 @@ export type FecthuserType = {
   phone: string
   status: string
 }
+export type FecthAdminType = {
+  user_id: string
+  full_name: string
+  email: string
+  phone: string
+  role: { name: string }
+  status: string
+}
 
 export type userType = z.infer<typeof userSchema>;

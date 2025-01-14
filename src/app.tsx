@@ -1,10 +1,10 @@
 import { ToastContainer } from "react-toastify";
-import Navbar from "./nav-bar";
+import Dashboard from "./dashboard";
 
 export function App() {
   return (
     <div className="flex h-screen overflow-hidden bg-secondary">
-      <Navbar />
+      <Dashboard />
       <ToastContainer />
     </div>
   );

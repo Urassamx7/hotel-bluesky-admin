@@ -1,44 +1,28 @@
-import {
-  ChevronLeft,
-  ChevronRight,
-  ChevronsLeft,
-  ChevronsRight,
-  Plus,
-  Slash,
-} from "lucide-react";
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Plus, Slash } from "lucide-react";
+import Main from "./components/main";
+import Navbar from "./nav-bar";
+import type { FecthAdminType } from "../types";
 import { useEffect, useState } from "react";
 import { api } from "../services";
-import type { FecthuserType } from "../types";
-import Main from "./components/main";
-import { TableForm } from "./components/table";
-import Navbar from "./nav-bar";
-import { AxiosError } from "axios";
-import { handleError } from "../utils";
+import { AdminTableForm } from "./components/table-admin";
 
-const Client = () => {
-  const [users, setUsers] = useState<FecthuserType[]>([]);
 
-  const token = localStorage.getItem("@hotelbluesky:token");
-  if (token) {
-    useEffect(() => {
-      try {
-        const fetchData = async () => {
-          const response = await api.get<FecthuserType[]>(
-            "/admin/list-clients",
-            {
-              headers: { Authorization: `Bearer ${token}` },
-            }
-          );
-          setUsers(response.data);
-        };
-        fetchData();
-      } catch (error) {
-        if (error instanceof AxiosError) {
-          handleError(error);
-        }
-      }
-    }, [token]);
-  }
+const Admins = () => {
+  const [users, setUsers] = useState<FecthAdminType[]>([]);
+  useEffect(() => {
+    const token = localStorage.getItem("@hotelbluesky:token");
+    if (!token) {
+      return;
+    }
+    const fetchData = async () => {
+      const response = await api.get<FecthAdminType[]>("/admin/list-admins", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setUsers(response.data);
+      console.log(response.data);
+    };
+    fetchData();
+  }, []);
 
   return (
     <div className="flex h-screen overflow-hidden bg-secondary">
@@ -63,7 +47,7 @@ const Client = () => {
               aria-current="page"
               className="font-normal text-foreground"
             >
-              Clients
+              Admins
             </span>
           </ol>
         </nav>
@@ -84,7 +68,7 @@ const Client = () => {
           </div>
         </div>
         <div className="flex-1 overflow-auto scrollbar-thin scrollbar-thumb-pink-500 scrollbar-track-transparent">
-          <TableForm users={users} />
+          <AdminTableForm users={users} />
         </div>
         <div className="flex flex-col items-center justify-end gap-2 py-4 sm:flex-row">
           <div className="flex w-full items-center justify-between gap-2 sm:justify-end">
@@ -124,4 +108,4 @@ const Client = () => {
   );
 };
 
-export default Client;
+export default Admins;

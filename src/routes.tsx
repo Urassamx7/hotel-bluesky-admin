@@ -4,6 +4,7 @@ import Logout from "./logout";
 import { App } from "./app";
 import Client from "./client";
 import { useAuth } from "./context/auth";
+import Admins from "./admin";
 
 export const Router = () => {
   return (
@@ -23,6 +24,14 @@ export const Router = () => {
         element={
           <ProtectedRoutes>
             <Client />
+          </ProtectedRoutes>
+        }
+      />
+      <Route
+        path="/admins"
+        element={
+          <ProtectedRoutes>
+            <Admins />
           </ProtectedRoutes>
         }
       />
