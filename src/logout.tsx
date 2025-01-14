@@ -1,40 +1,60 @@
 import { AlertDialog, Button, Flex } from "@radix-ui/themes";
 import { useAuth } from "./context/auth";
+import { LogOut } from "lucide-react";
 
 const Logout = () => {
   const { logout } = useAuth();
   return (
-    <div className="relative h-screen flex-col items-center justify-center md:grid lg:max-w-none  lg:px-0 bg-backgroundColor">
-      <AlertDialog.Root>
-        <AlertDialog.Trigger style={{ cursor: "pointer" }}>
-          <Button color="blue">Logout</Button>
-        </AlertDialog.Trigger>
-        <AlertDialog.Content
-          maxWidth="450px"
+    <AlertDialog.Root>
+      <AlertDialog.Trigger>
+        <Button
           style={{
-            backgroundColor: "#020817",
+            cursor: "pointer",
+            justifyContent: "start",
+            flex: "1",
+            backgroundColor: "transparent",
+            padding: 0,
           }}
         >
-          <AlertDialog.Title>Logout</AlertDialog.Title>
-          <AlertDialog.Description size="2">
-            Você tem certeza que quer sair da conta?
-          </AlertDialog.Description>
+          <LogOut /> Logout
+        </Button>
+      </AlertDialog.Trigger>
+      <AlertDialog.Content
+        maxWidth="450px"
+        style={{
+          backgroundColor: "#020817",
+        }}
+      >
+        <AlertDialog.Title>Sair</AlertDialog.Title>
+        <AlertDialog.Description size="2">
+          Você tem certeza que quer sair da conta?
+        </AlertDialog.Description>
 
-          <Flex gap="3" mt="4" justify="end">
-            <AlertDialog.Cancel>
-              <Button variant="surface" color="gray">
-                Cancelar
-              </Button>
-            </AlertDialog.Cancel>
-            <AlertDialog.Action>
-              <Button variant="solid" color="blue" onClick={logout}>
-                Logout
-              </Button>
-            </AlertDialog.Action>
-          </Flex>
-        </AlertDialog.Content>
-      </AlertDialog.Root>
-    </div>
+        <Flex gap="3" mt="4" justify="end">
+          <AlertDialog.Cancel>
+            <Button
+              variant="surface"
+              color="gray"
+              style={{ cursor: "pointer" }}
+              className="hover:bg-gray-500 hover:text-zinc-50 ease-in-out"
+            >
+              Cancelar
+            </Button>
+          </AlertDialog.Cancel>
+          <AlertDialog.Action>
+            <Button
+              variant="solid"
+              color="blue"
+              onClick={logout}
+              style={{ cursor: "pointer" }}
+              className="hover:bg-blue-500 ease-in-out"
+            >
+              Logout
+            </Button>
+          </AlertDialog.Action>
+        </Flex>
+      </AlertDialog.Content>
+    </AlertDialog.Root>
   );
 };
 

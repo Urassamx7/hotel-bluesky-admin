@@ -9,7 +9,7 @@ import {
   Dialog,
   TextField,
 } from "@radix-ui/themes";
-import { FecthuserType } from "../../types";
+import type { FecthuserType } from "../../types";
 import { Ellipsis } from "lucide-react";
 import { Delete } from "../../services";
 import delay from "delay";
@@ -37,26 +37,28 @@ export const TableForm = ({ users }: Props) => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {users &&
-            users.map((user) => (
-              <Table.Row key={user.user_id}>
-                <Table.RowHeaderCell>{user.full_name}</Table.RowHeaderCell>
-                <Table.Cell>{user.email}</Table.Cell>
-                <Table.Cell>{user.phone}</Table.Cell>
-                <Table.Cell>
-                  {user.status === "Active" ? (
-                    <Badge color="green"> {user.status}</Badge>
-                  ) : (
-                    <Badge color="red"> {user.status}</Badge>
-                  )}
-                </Table.Cell>
-                <Table.Cell>
-                  <button className="hover:bg-white/10 ease-in-out rounded-md">
-                    {ActionDropdown(user.full_name, user.user_id)}
-                  </button>
-                </Table.Cell>
-              </Table.Row>
-            ))}
+          {users?.map((user) => (
+            <Table.Row key={user.user_id}>
+              <Table.RowHeaderCell>{user.full_name}</Table.RowHeaderCell>
+              <Table.Cell>{user.email}</Table.Cell>
+              <Table.Cell>{user.phone}</Table.Cell>
+              <Table.Cell>
+                {user.status === "Active" ? (
+                  <Badge color="green"> {user.status}</Badge>
+                ) : (
+                  <Badge color="red"> {user.status}</Badge>
+                )}
+              </Table.Cell>
+              <Table.Cell>
+                <button
+                  type="button"
+                  className="hover:bg-white/10 ease-in-out rounded-md"
+                >
+                  {ActionDropdown(user.full_name, user.user_id)}
+                </button>
+              </Table.Cell>
+            </Table.Row>
+          ))}
         </Table.Body>
       </Table.Root>
       <ToastContainer />
@@ -88,12 +90,22 @@ const AlertDelete = (name: string, id: string) => {
 
         <Flex gap="3" mt="4" justify="end">
           <AlertDialog.Cancel>
-            <Button variant="surface" color="gray">
+            <Button
+              variant="surface"
+              color="gray"
+              className="hover:bg-gray-500 hover:text-zinc-50 ease-in-out"
+              style={{ cursor: "pointer" }}
+            >
               Cancelar
             </Button>
           </AlertDialog.Cancel>
           <AlertDialog.Action>
-            <Button variant="solid" color="red" onClick={() => DeleteUser(id)}>
+            <Button
+              variant="solid"
+              color="red"
+              onClick={() => DeleteUser(id)}
+              style={{ cursor: "pointer" }}
+            >
               Deletar Cliente
             </Button>
           </AlertDialog.Action>
@@ -148,6 +160,7 @@ const FormDialog = () => {
         </Dialog.Description>
 
         <Flex direction="column" gap="3">
+          {/* biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
           <label>
             <Text as="div" size="2" mb="1" weight="bold">
               Name
@@ -157,6 +170,7 @@ const FormDialog = () => {
               placeholder="Enter your full name"
             />
           </label>
+          {/* biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
           <label>
             <Text as="div" size="2" mb="1" weight="bold">
               Email
